@@ -16,12 +16,12 @@ function App() {
   }
 
   function handleOnUpdate(sec: number) {
-    sec === 3 && play();
+    sec === 4 && play();
   }
 
   return (
     <>
-    {/* <button onClick={()=>play()}>Play</button> */}
+      {/* <button onClick={()=>play()}>Play</button> */}
       <div
         onClick={() => {
           setisPlaying((prev) => !prev);
@@ -33,12 +33,18 @@ function App() {
           //   return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
           // }}
           key={restart}
+          size={300}
           isPlaying={isPlaying}
           duration={5}
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
           colorsTime={[7, 5, 2, 0]}
           onUpdate={handleOnUpdate}>
-          {({ remainingTime }) => remainingTime}
+          {/* {({ remainingTime }) => remainingTime} */}
+          {({ remainingTime }) => (
+            <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
+              {remainingTime}
+            </div>
+          )}
         </CountdownCircleTimer>
       </div>
     </>
