@@ -35,7 +35,7 @@ function App() {
   }, []);
 
   console.log(isAudioPlaying);
-  
+
   function play() {
     playSound();
   }
@@ -60,7 +60,7 @@ function App() {
           key={restart}
           size={300}
           isPlaying={isPlaying}
-          duration={5}
+          duration={6}
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
           colorsTime={[7, 5, 2, 0]}
           onUpdate={handleOnUpdate}>
