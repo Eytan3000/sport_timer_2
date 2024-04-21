@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import './App.css';
 import sound_321go from './assets/321done.mp3';
@@ -10,31 +10,7 @@ function playSound() {
 function App() {
   const [restart, setrestart] = useState(0);
   const [isPlaying, setisPlaying] = useState(false);
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-
-  useEffect(() => {
-    const checkAudioPlaying = () => {
-      const audio = new Audio();
-      audio.src = '';
-      audio.autoplay = true;
-      audio.onplaying = () => {
-        setIsAudioPlaying(true);
-        audio.remove();
-      };
-      audio.onended = () => {
-        setIsAudioPlaying(false);
-        audio.remove();
-      };
-    };
-
-    checkAudioPlaying();
-
-    return () => {
-      setIsAudioPlaying(false);
-    };
-  }, []);
-
-  console.log(isAudioPlaying);
+  const [secs, setSecs] = useState(60);
 
   function play() {
     playSound();
@@ -46,6 +22,16 @@ function App() {
 
   return (
     <>
+      <div
+        style={{
+          marginBottom: '20px',
+          display: 'flex',
+          gap: '20px',
+          justifyContent: 'center',
+        }}>
+        <button onClick={()=>setSecs(90)}>90</button>
+        <button onClick={()=>setSecs(60)}>60</button>
+      </div>
       <div
         onClick={() => {
           setisPlaying((prev) => !prev);
@@ -60,7 +46,7 @@ function App() {
           key={restart}
           size={300}
           isPlaying={isPlaying}
-          duration={6}
+          duration={secs}
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
           colorsTime={[7, 5, 2, 0]}
           onUpdate={handleOnUpdate}>
