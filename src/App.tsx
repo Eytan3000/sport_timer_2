@@ -21,7 +21,7 @@ function App() {
 
   return (
     <>
-    <button onClick={()=>play()}>Play</button>
+    {/* <button onClick={()=>play()}>Play</button> */}
       <div
         onClick={() => {
           setisPlaying((prev) => !prev);
@@ -34,7 +34,7 @@ function App() {
           // }}
           key={restart}
           isPlaying={isPlaying}
-          duration={60}
+          duration={5}
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
           colorsTime={[7, 5, 2, 0]}
           onUpdate={handleOnUpdate}>
