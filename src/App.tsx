@@ -45,6 +45,11 @@ function App() {
     );
     setExercises((prev) => [...prev, exerciseToAdd]);
   }
+
+  function handleReset() {
+    setExercises((prev) => [...prev, ...doneExercises]);
+    setDoneExercises([]);
+  }
   return (
     <>
       <div style={{ marginBottom: '20px' }}>
@@ -96,7 +101,7 @@ function App() {
           )}
         </CountdownCircleTimer>
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div style={{ marginBlock: '20px' }}>
         {doneExercises.map((exercise) => (
           <Chip
             key={exercise}
@@ -107,6 +112,7 @@ function App() {
           </Chip>
         ))}
       </div>
+      <button onClick={handleReset}>Reset</button>
     </>
   );
 }
