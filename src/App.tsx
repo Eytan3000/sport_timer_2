@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import './App.css';
 import sound_321go from './assets/321done.mp3';
+import { Chip } from '@mui/joy';
 function playSound() {
   const audio = new Audio(sound_321go);
   audio.play();
@@ -11,6 +12,15 @@ function App() {
   const [restart, setrestart] = useState(0);
   const [isPlaying, setisPlaying] = useState(false);
   const [secs, setSecs] = useState(60);
+  const [exercises, setExercises] = useState([
+    'Legs',
+    'Abdominal',
+    'Biceps',
+    'Chest',
+    'Pull ups',
+    'Dips',
+  ]);
+  const [doneExercises, setDoneExercises] = useState<string[]>([]);
 
   function play() {
     playSound();
@@ -20,8 +30,36 @@ function App() {
     sec === 4 && play();
   }
 
+  //setDoneExercises
+
+  function handleClickChip(exerciseToRemove: string) {
+    setExercises((prev) =>
+      prev.filter((exercise) => exercise !== exerciseToRemove)
+    );
+    setDoneExercises((prev) => [...prev, exerciseToRemove]);
+  }
+
+  function handleClickDisabledChip(exerciseToAdd: string) {
+    setDoneExercises((prev) =>
+      prev.filter((exercise) => exercise !== exerciseToAdd)
+    );
+    setExercises((prev) => [...prev, exerciseToAdd]);
+  }
   return (
     <>
+      <div style={{ marginBottom: '20px' }}>
+        {exercises.map((exercise) => (
+          <Chip
+            key={exercise}
+            disabled={false}
+            onClick={() => handleClickChip(exercise)}
+            size="lg"
+            variant="solid"
+            color="primary">
+            {exercise}
+          </Chip>
+        ))}
+      </div>
       <div
         style={{
           marginBottom: '20px',
@@ -29,8 +67,8 @@ function App() {
           gap: '20px',
           justifyContent: 'center',
         }}>
-        <button onClick={()=>setSecs(90)}>90</button>
-        <button onClick={()=>setSecs(60)}>60</button>
+        <button onClick={() => setSecs(90)}>90</button>
+        <button onClick={() => setSecs(60)}>60</button>
       </div>
       <div
         onClick={() => {
@@ -57,6 +95,17 @@ function App() {
             </div>
           )}
         </CountdownCircleTimer>
+      </div>
+      <div style={{ marginTop: '20px' }}>
+        {doneExercises.map((exercise) => (
+          <Chip
+            key={exercise}
+            onClick={() => handleClickDisabledChip(exercise)}
+            size="lg"
+            variant="solid">
+            {exercise}
+          </Chip>
+        ))}
       </div>
     </>
   );
