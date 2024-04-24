@@ -52,67 +52,87 @@ function App() {
   }
   return (
     <>
-      <div style={{ marginBottom: '20px' }}>
-        {exercises.map((exercise) => (
-          <Chip
-            key={exercise}
-            disabled={false}
-            onClick={() => handleClickChip(exercise)}
-            size="lg"
-            variant="solid"
-            color="primary">
-            {exercise}
-          </Chip>
-        ))}
-      </div>
       <div
         style={{
-          marginBottom: '20px',
           display: 'flex',
-          gap: '20px',
+          flexDirection: 'column',
           justifyContent: 'center',
+          gap: '20px',
         }}>
-        <button onClick={() => setSecs(90)}>90</button>
-        <button onClick={() => setSecs(60)}>60</button>
-      </div>
-      <div
-        onClick={() => {
-          setisPlaying((prev) => !prev);
-          setrestart((prev) => prev + 1);
-        }}>
-        <CountdownCircleTimer
-          onComplete={() => {
-            // // do your stuff here
-            // return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
+        <div style={{ marginBottom: '20px' }}>
+          {exercises.map((exercise) => (
+            <Chip
+              className={'chip'}
+              key={exercise}
+              disabled={false}
+              onClick={() => handleClickChip(exercise)}
+              size="lg"
+              variant="solid"
+              color="primary">
+              {exercise}
+            </Chip>
+          ))}
+        </div>
+        <div
+          style={{
+            // marginBottom: '20px',
+            display: 'flex',
+            gap: '20px',
+            justifyContent: 'center',
+          }}>
+          <button onClick={() => setSecs(90)}>90</button>
+          <button onClick={() => setSecs(60)}>60</button>
+        </div>
+        <div
+          style={{ margin: '0 auto' }}
+          onClick={() => {
             setisPlaying((prev) => !prev);
-          }}
-          key={restart}
-          size={300}
-          isPlaying={isPlaying}
-          duration={secs}
-          colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-          colorsTime={[7, 5, 2, 0]}
-          onUpdate={handleOnUpdate}>
-          {/* {({ remainingTime }) => remainingTime} */}
-          {({ remainingTime }) => (
-            <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
-              {remainingTime}
-            </div>
-          )}
-        </CountdownCircleTimer>
+            setrestart((prev) => prev + 1);
+          }}>
+          <CountdownCircleTimer
+            onComplete={() => {
+              // // do your stuff here
+              // return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
+              setisPlaying((prev) => !prev);
+            }}
+            key={restart}
+            size={300}
+            isPlaying={isPlaying}
+            duration={secs}
+            colors={
+              isPlaying
+                ? ['#004777', '#F7B801', '#A30000', '#A30000']
+                : ['#acacac', '#acacac', '#acacac', '#acacac']
+            }
+            colorsTime={[7, 5, 2, 0]}
+            onUpdate={handleOnUpdate}>
+            {/* {({ remainingTime }) => remainingTime} */}
+            {({ remainingTime }) => (
+              <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                {remainingTime}
+              </div>
+            )}
+          </CountdownCircleTimer>
+        </div>
+        <div
+          style={
+            {
+              // marginBlock: '20px'
+            }
+          }>
+          {doneExercises.map((exercise) => (
+            <Chip
+              className={'chip'}
+              key={exercise}
+              onClick={() => handleClickDisabledChip(exercise)}
+              size="lg"
+              variant="solid">
+              {exercise}
+            </Chip>
+          ))}
+        </div>
+        <button onClick={handleReset}>Reset</button>
       </div>
-      <div style={{ marginBlock: '20px' }}>
-        {doneExercises.map((exercise) => (
-          <Chip
-            key={exercise}
-            onClick={() => handleClickDisabledChip(exercise)}
-            size="lg"
-            variant="solid">
-            {exercise}
-          </Chip>
-        ))}
-      </div>
-      <button onClick={handleReset}>Reset</button>
     </>
   );
 }
