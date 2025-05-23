@@ -3,12 +3,14 @@ import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import './App.css';
 import sound_321go from './assets/321done.mp3';
 import { Chip } from '@mui/joy';
+import { useNavigate } from '@tanstack/react-router';
 function playSound() {
   const audio = new Audio(sound_321go);
   audio.play();
 }
 
 function App() {
+  const navigate = useNavigate();
   const [restart, setrestart] = useState(0);
   const [isPlaying, setisPlaying] = useState(false);
   const [secs, setSecs] = useState(60);
@@ -22,7 +24,6 @@ function App() {
   ]);
   const [doneExercises, setDoneExercises] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedExercise, setEditedExercise] = useState('');
 
   function play() {
     playSound();
@@ -34,7 +35,10 @@ function App() {
 
   function handleClickChip(clickedExercise: string) {
     if (isEditing) {
-      setEditedExercise(clickedExercise);
+      navigate({
+        to: '/editSet/$exercise',
+        params: { exercise: clickedExercise },
+      });
     } else {
       setExercises((prev) =>
         prev.filter((exercise) => exercise !== clickedExercise)
@@ -61,33 +65,19 @@ function App() {
 
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          gap: '20px',
-        }}>
-        <div
-          style={{
-            // marginBottom: '20px',
-            display: 'flex',
-            gap: '20px',
-            justifyContent: 'center',
-          }}>
+      <div className="main-container">
+        <div className="button-row">
           <button onClick={() => setSecs(90)}>90</button>
           <button onClick={() => setSecs(60)}>60</button>
         </div>
         <div
-          style={{ margin: '0 auto' }}
+          className="timer-container"
           onClick={() => {
             setisPlaying((prev) => !prev);
             setrestart((prev) => prev + 1);
           }}>
           <CountdownCircleTimer
             onComplete={() => {
-              // // do your stuff here
-              // return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
               setisPlaying((prev) => !prev);
             }}
             key={restart}
@@ -101,11 +91,8 @@ function App() {
             }
             colorsTime={[7, 5, 2, 0]}
             onUpdate={handleOnUpdate}>
-            {/* {({ remainingTime }) => remainingTime} */}
             {({ remainingTime }) => (
-              <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
-                {remainingTime}
-              </div>
+              <div className="remaining-time">{remainingTime}</div>
             )}
           </CountdownCircleTimer>
         </div>
@@ -124,12 +111,7 @@ function App() {
           ))}
         </div>
 
-        <div
-          style={
-            {
-              // marginBlock: '20px'
-            }
-          }>
+        <div>
           {doneExercises.map((exercise) => (
             <Chip
               className={'chip'}
@@ -143,8 +125,9 @@ function App() {
         </div>
         {/* <button onClick={handleReset}>Reset</button> removeEytan */}
         <button
+          className="edit-btn"
           style={{
-            background: isEditing ? '#ffcaca' : '',
+            background: isEditing ? '#ffcaca' : undefined,
           }}
           onClick={handleIsEditing}>
           +

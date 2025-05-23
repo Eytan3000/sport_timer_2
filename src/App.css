@@ -1,7 +1,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   text-align: center;
 }
 
@@ -43,4 +43,30 @@
 
 .chip {
   margin: 6px 4px;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.button-row {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.timer-container {
+  margin: 0 auto;
+}
+
+.remaining-time {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.edit-btn {
+  /* background will be set inline for isEditing, but default can be empty */
 }

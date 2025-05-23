@@ -1,0 +1,24 @@
+.edit-set-main-container {
+  display: flex;
+
+  flex-direction: column;
+  min-height: 100dvh;
+  justify-content: space-between;
+}
+
+.inputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 120px;
+}
+
+.edit-set-input-container {
+}
+
+.edit-set-buttons-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 41px;
+}
