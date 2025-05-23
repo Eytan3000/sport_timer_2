@@ -21,6 +21,8 @@ function App() {
     'Dips',
   ]);
   const [doneExercises, setDoneExercises] = useState<string[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedExercise, setEditedExercise] = useState('');
 
   function play() {
     playSound();
@@ -30,13 +32,15 @@ function App() {
     sec === 4 && play();
   }
 
-  //setDoneExercises
-
-  function handleClickChip(exerciseToRemove: string) {
-    setExercises((prev) =>
-      prev.filter((exercise) => exercise !== exerciseToRemove)
-    );
-    setDoneExercises((prev) => [...prev, exerciseToRemove]);
+  function handleClickChip(clickedExercise: string) {
+    if (isEditing) {
+      setEditedExercise(clickedExercise);
+    } else {
+      setExercises((prev) =>
+        prev.filter((exercise) => exercise !== clickedExercise)
+      );
+      setDoneExercises((prev) => [...prev, clickedExercise]);
+    }
   }
 
   function handleClickDisabledChip(exerciseToAdd: string) {
@@ -50,6 +54,11 @@ function App() {
     setExercises((prev) => [...prev, ...doneExercises]);
     setDoneExercises([]);
   }
+
+  function handleIsEditing() {
+    setIsEditing((prev) => !prev);
+  }
+
   return (
     <>
       <div
@@ -59,20 +68,6 @@ function App() {
           justifyContent: 'center',
           gap: '20px',
         }}>
-        <div style={{ marginBottom: '20px' }}>
-          {exercises.map((exercise) => (
-            <Chip
-              className={'chip'}
-              key={exercise}
-              disabled={false}
-              onClick={() => handleClickChip(exercise)}
-              size="lg"
-              variant="solid"
-              color="primary">
-              {exercise}
-            </Chip>
-          ))}
-        </div>
         <div
           style={{
             // marginBottom: '20px',
@@ -114,6 +109,21 @@ function App() {
             )}
           </CountdownCircleTimer>
         </div>
+        <div>
+          {exercises.map((exercise) => (
+            <Chip
+              className={'chip'}
+              key={exercise}
+              disabled={false}
+              onClick={() => handleClickChip(exercise)}
+              size="lg"
+              variant="solid"
+              color="primary">
+              {exercise}
+            </Chip>
+          ))}
+        </div>
+
         <div
           style={
             {
@@ -131,7 +141,14 @@ function App() {
             </Chip>
           ))}
         </div>
-        <button onClick={handleReset}>Reset</button>
+        {/* <button onClick={handleReset}>Reset</button> removeEytan */}
+        <button
+          style={{
+            background: isEditing ? '#ffcaca' : '',
+          }}
+          onClick={handleIsEditing}>
+          +
+        </button>
       </div>
     </>
   );
