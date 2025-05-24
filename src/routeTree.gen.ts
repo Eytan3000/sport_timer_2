@@ -11,7 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from '././routes'
+import { Route as IndexImport } from './routes/index'
 import { Route as EditSetExerciseImport } from './routes/editSet/$exercise'
 
 // Create/Update Routes

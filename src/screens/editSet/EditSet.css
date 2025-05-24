@@ -6,13 +6,16 @@
   justify-content: space-between;
 }
 
+.edit-set-secondary-container {
+}
+
+.edit-set-header {
+  display: flex;
+}
+
 .inputs {
   display: flex;
   justify-content: space-between;
-  gap: 120px;
-}
-
-.edit-set-input-container {
 }
 
 .edit-set-buttons-container {
@@ -21,4 +24,13 @@
   flex-direction: column;
   gap: 10px;
   margin-bottom: 41px;
+}
+
+.arrow {
+  height: 30px;
+  padding-top: 25px;
+
+  position: absolute;
+  inset-inline-start: 40px;
+  inset-block-start: 10px;
 }

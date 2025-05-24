@@ -1,19 +1,13 @@
 import { useState } from 'react';
-import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import './App.css';
-import sound_321go from './assets/321done.mp3';
+
 import { Chip } from '@mui/joy';
 import { useNavigate } from '@tanstack/react-router';
-function playSound() {
-  const audio = new Audio(sound_321go);
-  audio.play();
-}
+import Timer from './components/Timer';
 
 function App() {
   const navigate = useNavigate();
-  const [restart, setrestart] = useState(0);
-  const [isPlaying, setisPlaying] = useState(false);
-  const [secs, setSecs] = useState(60);
+
   const [exercises, setExercises] = useState([
     'Legs',
     'Abdominal',
@@ -24,14 +18,7 @@ function App() {
   ]);
   const [doneExercises, setDoneExercises] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-
-  function play() {
-    playSound();
-  }
-
-  function handleOnUpdate(sec: number) {
-    sec === 4 && play();
-  }
+  const [secs, setSecs] = useState(60);
 
   function handleClickChip(clickedExercise: string) {
     if (isEditing) {
@@ -70,32 +57,8 @@ function App() {
           <button onClick={() => setSecs(90)}>90</button>
           <button onClick={() => setSecs(60)}>60</button>
         </div>
-        <div
-          className="timer-container"
-          onClick={() => {
-            setisPlaying((prev) => !prev);
-            setrestart((prev) => prev + 1);
-          }}>
-          <CountdownCircleTimer
-            onComplete={() => {
-              setisPlaying((prev) => !prev);
-            }}
-            key={restart}
-            size={300}
-            isPlaying={isPlaying}
-            duration={secs}
-            colors={
-              isPlaying
-                ? ['#004777', '#F7B801', '#A30000', '#A30000']
-                : ['#acacac', '#acacac', '#acacac', '#acacac']
-            }
-            colorsTime={[7, 5, 2, 0]}
-            onUpdate={handleOnUpdate}>
-            {({ remainingTime }) => (
-              <div className="remaining-time">{remainingTime}</div>
-            )}
-          </CountdownCircleTimer>
-        </div>
+
+        <Timer secs={secs} />
         <div>
           {exercises.map((exercise) => (
             <Chip
