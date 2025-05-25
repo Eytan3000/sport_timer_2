@@ -49,6 +49,9 @@ function App() {
   function handleIsEditing() {
     setIsEditing((prev) => !prev);
   }
+  function openAuthModal() {
+    
+  }
 
   return (
     <>
@@ -95,6 +98,8 @@ function App() {
           onClick={handleIsEditing}>
           +
         </button>
+
+        <button onClick={openAuthModal}>Auth</button>
       </div>
     </>
   );
