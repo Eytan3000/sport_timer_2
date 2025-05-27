@@ -1,46 +1,53 @@
-const reps = 7;
-const weight = 10;
-
 import { useNavigate, useParams } from '@tanstack/react-router';
 import './EditSet.css';
 import Timer from '../../components/Timer';
 import backArrow from '../../assets/back_arrow.svg';
 import { useState, useRef, useEffect } from 'react';
 import Modal from '../../components/Modal';
+import { Exercise, ExerciseSet } from '../../types';
+import { getExerciseByName, updateExercise } from '../../firebase/firebaseAPI';
+import { generateUID } from '../../helpers';
+const uid = '1234';
 
 export default function EditSet() {
   const navigate = useNavigate();
-  const { exercise } = useParams({ strict: false });
+  const params = useParams({ strict: false });
+  const exerciseName = params.exercise || '';
+
+  const initialExercise = {
+    id: generateUID(),
+    name: exerciseName || '',
+  };
+
+  const initialSets: ExerciseSet[] = [{ reps: 7, weight: 10 }];
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editField, setEditField] = useState<'reps' | 'weight' | null>(null);
   const [editValue, setEditValue] = useState('');
-  const [repsState, setRepsState] = useState(reps);
-  const [weightState, setWeightState] = useState(weight);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [data, setData] = useState({
-    id: 1,
-    name: 'Bench Press',
-    sets: [
-      { reps: 7, weight: 10 },
-      { reps: 8, weight: 11 },
-      { reps: 9, weight: 12 },
-      { reps: 10, weight: 13 },
-      { reps: 11, weight: 14 },
-      { reps: 12, weight: 15 },
-    ],
-  }); //removeEytan
+  const [exercise, setExercise] = useState(initialExercise); //removeEytan
+  const [sets, setSets] = useState<ExerciseSet[]>([]);
 
   const [setNum, setSetNum] = useState(0);
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    setData((prev) => {
-      const newSets = [...prev.sets];
-      newSets[setNum] = { reps: repsState, weight: weightState };
-      return { ...prev, sets: newSets };
-    });
-  }, [repsState, weightState, setNum]);
+    (async () => {
+      setLoading(true);
+      const res = await getExerciseByName(uid, new Date(), exerciseName);
+      if (res) {
+        const exercise = { id: res.id, name: res.name };
+        setExercise(exercise);
+        setSets(res.sets);
+      } else {
+        setExercise(initialExercise);
+        setSets(initialSets);
+      }
+      setLoading(false);
+    })();
+  }, []);
 
   useEffect(() => {
     if (modalOpen && inputRef.current) {
@@ -49,9 +56,22 @@ export default function EditSet() {
     }
   }, [modalOpen]);
 
-  function handleAddSet() {}
+  useEffect(() => {
+    setSetNum(sets.length ? sets.length - 1 : 0);
+  }, [sets]);
+
+  function handleAddSet() {
+    setSets((prev) => [...prev, { reps: 7, weight: 10 }]);
+  }
+
   function handleSave() {
-    // save input to db
+    const data: Exercise = {
+      id: exercise.id,
+      name: exercise.name || '',
+      sets: sets,
+    };
+    updateExercise(uid, new Date(), data);
+    navigate({ to: '/' });
   }
   function handleBack() {
     navigate({ to: '/' });
@@ -72,13 +92,24 @@ export default function EditSet() {
   function handleModalSave() {
     const val = Number(editValue);
     if (editField === 'reps') {
-      setRepsState(val);
+      setSets((prev) => {
+        const newSets = [...prev];
+        newSets[setNum].reps = val;
+        return newSets;
+      });
     } else if (editField === 'weight') {
-      setWeightState(val);
+      setSets((prev) => {
+        const newSets = [...prev];
+        newSets[setNum].weight = val;
+        return newSets;
+      });
     }
     closeModal();
   }
 
+  if (!exercise) return <div>No exercise Name in url</div>;
+  if (loading) return <div>Loading...</div>;
+  if (!sets.length) return <div>No sets available</div>;
   return (
     <>
       <div className="edit-set-main-container">
@@ -86,27 +117,29 @@ export default function EditSet() {
           <img src={backArrow} alt="" className="arrow" onClick={handleBack} />
 
           <div className="edit-set-title-row">
-            <h2>{exercise}</h2>
-            <h4>Set {setNum + 1}</h4>
+            <h2>{exerciseName}</h2>
+            <h4>
+              Set {setNum + 1} / {sets.length}
+            </h4>
           </div>
 
-          <div className="inputs">
+          <div className="inputs" key={setNum}>
             <div className="edit-set-input-container">
               <h3>Reps</h3>
               <h3
                 style={{ cursor: 'pointer', color: '#1976d2' }}
-                onClick={() => openModal('reps', repsState)}>
+                onClick={() => openModal('reps', sets[setNum].reps)}>
                 {/* {repsState} */}
-                {data.sets[setNum].reps}
+                {sets[setNum].reps}
               </h3>
             </div>
             <div className="edit-set-input-container">
               <h3>Weight</h3>
               <h3
                 style={{ cursor: 'pointer', color: '#1976d2' }}
-                onClick={() => openModal('weight', weightState)}>
+                onClick={() => openModal('weight', sets[setNum].weight)}>
                 {/* {weightState} */}
-                {data.sets[setNum].weight}
+                {sets[setNum].weight}
               </h3>
             </div>
           </div>
@@ -121,7 +154,7 @@ export default function EditSet() {
           </button>
           <button
             onClick={() => setSetNum((prev) => prev + 1)}
-            disabled={setNum === data.sets.length - 1}>
+            disabled={setNum === sets.length - 1}>
             {'>'}
           </button>
         </div>

@@ -61,7 +61,7 @@ function App() {
           <button onClick={() => setSecs(60)}>60</button>
         </div>
 
-        <Timer secs={secs}/>
+        <Timer secs={secs} />
         <div>
           {exercises.map((exercise) => (
             <Chip
