@@ -61,7 +61,7 @@ export default function EditSet() {
   }, [sets]);
 
   function handleAddSet() {
-    setSets((prev) => [...prev, { reps: 7, weight: 10 }]);
+    setSets((prev) => [...prev, { reps: prev[prev.length-1].reps, weight: prev[prev.length-1].weight }]);
   }
 
   function handleSave() {
