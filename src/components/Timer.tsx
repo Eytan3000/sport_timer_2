@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useMyContext } from '../contexts/timeContext';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import sound_321go from '../assets/321done.mp3';
 import './Timer.css';
+import { useTimeContext } from '../contexts/timeContext';
 
 function playSound() {
   const audio = new Audio(sound_321go);
@@ -17,13 +17,13 @@ export default function Timer({
   size?: number;
 }) {
   const [restart, setrestart] = useState(0);
-  //   const [isPlaying, setisPlaying] = useState(false);
+
   const {
     initialRemainingTime,
     setInitialRemainingTime,
     isPlaying,
     setisPlaying,
-  } = useMyContext();
+  } = useTimeContext();
 
   let rt = 0;
   function play() {

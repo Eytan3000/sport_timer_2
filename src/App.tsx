@@ -4,6 +4,7 @@ import './App.css';
 import { Chip } from '@mui/joy';
 import { useNavigate } from '@tanstack/react-router';
 import Timer from './components/Timer';
+import { useChipsContext } from './contexts/chipsContext';
 
 function App() {
   const navigate = useNavigate();
@@ -16,7 +17,8 @@ function App() {
     'Pull ups',
     'Dips',
   ]);
-  const [doneExercises, setDoneExercises] = useState<string[]>([]);
+
+  const { doneExercises, setDoneExercises } = useChipsContext();
   const [isEditing, setIsEditing] = useState(false);
   const [secs, setSecs] = useState(60);
 
@@ -49,9 +51,7 @@ function App() {
   function handleIsEditing() {
     setIsEditing((prev) => !prev);
   }
-  function openAuthModal() {
-    
-  }
+  function openAuthModal() {}
 
   return (
     <>
@@ -61,7 +61,7 @@ function App() {
           <button onClick={() => setSecs(60)}>60</button>
         </div>
 
-        <Timer secs={secs} />
+        <Timer secs={secs}/>
         <div>
           {exercises.map((exercise) => (
             <Chip

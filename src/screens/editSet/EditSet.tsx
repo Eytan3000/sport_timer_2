@@ -1,4 +1,3 @@
-const setNum = 1;
 const reps = 7;
 const weight = 10;
 
@@ -20,6 +19,29 @@ export default function EditSet() {
   const [weightState, setWeightState] = useState(weight);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const [data, setData] = useState({
+    id: 1,
+    name: 'Bench Press',
+    sets: [
+      { reps: 7, weight: 10 },
+      { reps: 8, weight: 11 },
+      { reps: 9, weight: 12 },
+      { reps: 10, weight: 13 },
+      { reps: 11, weight: 14 },
+      { reps: 12, weight: 15 },
+    ],
+  }); //removeEytan
+
+  const [setNum, setSetNum] = useState(0);
+
+  useEffect(() => {
+    setData((prev) => {
+      const newSets = [...prev.sets];
+      newSets[setNum] = { reps: repsState, weight: weightState };
+      return { ...prev, sets: newSets };
+    });
+  }, [repsState, weightState, setNum]);
+
   useEffect(() => {
     if (modalOpen && inputRef.current) {
       inputRef.current.focus();
@@ -28,7 +50,9 @@ export default function EditSet() {
   }, [modalOpen]);
 
   function handleAddSet() {}
-  function handleSave() {}
+  function handleSave() {
+    // save input to db
+  }
   function handleBack() {
     navigate({ to: '/' });
   }
@@ -46,10 +70,11 @@ export default function EditSet() {
   }
 
   function handleModalSave() {
+    const val = Number(editValue);
     if (editField === 'reps') {
-      setRepsState(Number(editValue));
+      setRepsState(val);
     } else if (editField === 'weight') {
-      setWeightState(Number(editValue));
+      setWeightState(val);
     }
     closeModal();
   }
@@ -62,7 +87,7 @@ export default function EditSet() {
 
           <div className="edit-set-title-row">
             <h2>{exercise}</h2>
-            <h4>Set {setNum}</h4>
+            <h4>Set {setNum + 1}</h4>
           </div>
 
           <div className="inputs">
@@ -70,23 +95,35 @@ export default function EditSet() {
               <h3>Reps</h3>
               <h3
                 style={{ cursor: 'pointer', color: '#1976d2' }}
-                onClick={() => openModal('reps', repsState)}
-              >
-                {repsState}
+                onClick={() => openModal('reps', repsState)}>
+                {/* {repsState} */}
+                {data.sets[setNum].reps}
               </h3>
             </div>
             <div className="edit-set-input-container">
               <h3>Weight</h3>
               <h3
                 style={{ cursor: 'pointer', color: '#1976d2' }}
-                onClick={() => openModal('weight', weightState)}
-              >
-                {weightState}
+                onClick={() => openModal('weight', weightState)}>
+                {/* {weightState} */}
+                {data.sets[setNum].weight}
               </h3>
             </div>
           </div>
 
           <Timer size={220} />
+        </div>
+        <div className="edit-set-next-prev-container">
+          <button
+            onClick={() => setSetNum((prev) => prev - 1)}
+            disabled={setNum === 0}>
+            {'<'}
+          </button>
+          <button
+            onClick={() => setSetNum((prev) => prev + 1)}
+            disabled={setNum === data.sets.length - 1}>
+            {'>'}
+          </button>
         </div>
         <div className="edit-set-buttons-container">
           <button onClick={handleAddSet}>Add Set</button>
@@ -100,10 +137,17 @@ export default function EditSet() {
             ref={inputRef}
             type="number"
             value={editValue}
-            onChange={e => setEditValue(e.target.value)}
+            onChange={(e) => setEditValue(e.target.value)}
             style={{ fontSize: '1.5rem', padding: '0.5rem', width: '100px' }}
           />
-          <div style={{ marginTop: '20px', display: 'flex', gap: '10px', justifyContent: 'center' }}>
+
+          <div
+            style={{
+              marginTop: '20px',
+              display: 'flex',
+              gap: '10px',
+              justifyContent: 'center',
+            }}>
             <button onClick={handleModalSave}>Save</button>
             <button onClick={closeModal}>Cancel</button>
           </div>

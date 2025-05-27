@@ -6,6 +6,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 import { TimeContextProvider } from './contexts/timeContext';
+import { ChipsContextProvider } from './contexts/chipsContext';
 // Create a new router instance
 const router = createRouter({ routeTree });
 
@@ -18,8 +19,10 @@ declare module '@tanstack/react-router' {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <TimeContextProvider>
-      <RouterProvider router={router} />
-    </TimeContextProvider>
+    <ChipsContextProvider>
+      <TimeContextProvider>
+        <RouterProvider router={router} />
+      </TimeContextProvider>
+    </ChipsContextProvider>
   </React.StrictMode>
 );

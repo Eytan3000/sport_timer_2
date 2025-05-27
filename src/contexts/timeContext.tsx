@@ -20,15 +20,19 @@ export const TimeContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <MyContext.Provider
-      value={{ initialRemainingTime, setInitialRemainingTime, isPlaying,
-        setisPlaying }}>
+      value={{
+        initialRemainingTime,
+        setInitialRemainingTime,
+        isPlaying,
+        setisPlaying,
+      }}>
       {children}
     </MyContext.Provider>
   );
 };
 
 // 4. Custom hook for using the context
-export function useMyContext() {
+export function useTimeContext() {
   const context = useContext(MyContext);
   if (context === undefined) {
     throw new Error('useMyContext must be used within a MyContextProvider');
