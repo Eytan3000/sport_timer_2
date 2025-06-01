@@ -3,14 +3,17 @@ import './EditSet.css';
 import Timer from '../../components/Timer';
 import backArrow from '../../assets/back_arrow.svg';
 import { useState, useRef, useEffect } from 'react';
-import Modal from '../../components/Modal';
 import { Exercise, ExerciseSet } from '../../types';
 import { getExerciseByName, updateExercise } from '../../firebase/firebaseAPI';
 import { generateUID } from '../../helpers';
-const uid = '1234';
+import { useAuth } from '../../contexts/AuthContext';
+import EditSetModal from '../../components/EditSetModal';
 
 export default function EditSet() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const uid = user?.uid;
+
   const params = useParams({ strict: false });
   const exerciseName = params.exercise || '';
 
@@ -36,6 +39,8 @@ export default function EditSet() {
   useEffect(() => {
     (async () => {
       setLoading(true);
+      if (!uid) return;
+
       const res = await getExerciseByName(uid, new Date(), exerciseName);
       if (res) {
         const exercise = { id: res.id, name: res.name };
@@ -61,18 +66,31 @@ export default function EditSet() {
   }, [sets]);
 
   function handleAddSet() {
-    setSets((prev) => [...prev, { reps: prev[prev.length-1].reps, weight: prev[prev.length-1].weight }]);
+    setSets((prev) => [
+      ...prev,
+      {
+        reps: prev[prev.length - 1].reps,
+        weight: prev[prev.length - 1].weight,
+      },
+    ]);
   }
 
-  function handleSave() {
-    const data: Exercise = {
-      id: exercise.id,
-      name: exercise.name || '',
-      sets: sets,
-    };
-    updateExercise(uid, new Date(), data);
-    navigate({ to: '/' });
+  async function handleSave() {
+    try {
+      if (!uid) throw new Error('No User ID.');
+
+      const data: Exercise = {
+        id: exercise.id,
+        name: exercise.name || '',
+        sets: sets,
+      };
+      await updateExercise(uid, new Date(), data);
+      navigate({ to: '/' });
+    } catch (err) {
+      console.log('Error:', err);
+    }
   }
+
   function handleBack() {
     navigate({ to: '/' });
   }
@@ -164,27 +182,15 @@ export default function EditSet() {
         </div>
 
         {/* Modal */}
-        <Modal open={modalOpen} onClose={closeModal}>
-          <h2>Edit {editField === 'reps' ? 'Reps' : 'Weight'}</h2>
-          <input
-            ref={inputRef}
-            type="number"
-            value={editValue}
-            onChange={(e) => setEditValue(e.target.value)}
-            style={{ fontSize: '1.5rem', padding: '0.5rem', width: '100px' }}
-          />
-
-          <div
-            style={{
-              marginTop: '20px',
-              display: 'flex',
-              gap: '10px',
-              justifyContent: 'center',
-            }}>
-            <button onClick={handleModalSave}>Save</button>
-            <button onClick={closeModal}>Cancel</button>
-          </div>
-        </Modal>
+        <EditSetModal
+          open={modalOpen}
+          onClose={closeModal}
+          editField={editField}
+          editValue={editValue}
+          inputRef={inputRef}
+          setEditValue={setEditValue}
+          handleModalSave={handleModalSave}
+        />
       </div>
     </>
   );

@@ -2,12 +2,19 @@ import { useState } from 'react';
 import './App.css';
 
 import { Chip } from '@mui/joy';
-import { useNavigate } from '@tanstack/react-router';
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import Timer from './components/Timer';
 import { useChipsContext } from './contexts/chipsContext';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth } from './firebase/firebase';
+import AuthModal from './components/AuthModal';
+import { useAuth } from './contexts/AuthContext';
 
 function App() {
   const navigate = useNavigate();
+
+  const { user } = useAuth();
+  const uid = user?.uid;
 
   const [exercises, setExercises] = useState([
     'Legs',
@@ -21,13 +28,19 @@ function App() {
   const { doneExercises, setDoneExercises } = useChipsContext();
   const [isEditing, setIsEditing] = useState(false);
   const [secs, setSecs] = useState(60);
-
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  console.log(uid);
   function handleClickChip(clickedExercise: string) {
     if (isEditing) {
-      navigate({
-        to: '/editSet/$exercise',
-        params: { exercise: clickedExercise },
-      });
+      if (!uid) {
+        setAuthModalOpen(true);
+        return;
+      } else {
+        navigate({
+          to: '/editSet/$exercise',
+          params: { exercise: clickedExercise },
+        });
+      }
     } else {
       setExercises((prev) =>
         prev.filter((exercise) => exercise !== clickedExercise)
@@ -43,64 +56,74 @@ function App() {
     setExercises((prev) => [...prev, exerciseToAdd]);
   }
 
-  function handleReset() {
-    setExercises((prev) => [...prev, ...doneExercises]);
-    setDoneExercises([]);
-  }
-
   function handleIsEditing() {
     setIsEditing((prev) => !prev);
   }
-  function openAuthModal() {}
+
+  async function handleGoogleSignIn() {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      setAuthModalOpen(false);
+    } catch (error) {
+      alert('Google sign-in failed');
+    }
+  }
+
+  function openAuthModal() {
+    setAuthModalOpen(true);
+  }
 
   return (
     <>
       <div className="main-container">
+
         <div className="button-row">
           <button onClick={() => setSecs(90)}>90</button>
           <button onClick={() => setSecs(60)}>60</button>
         </div>
 
         <Timer secs={secs} />
-        <div>
-          {exercises.map((exercise) => (
-            <Chip
-              className={'chip'}
-              key={exercise}
-              disabled={false}
-              onClick={() => handleClickChip(exercise)}
-              size="lg"
-              variant="solid"
-              color="primary">
-              {exercise}
-            </Chip>
-          ))}
-        </div>
+        <div className="exercise-container">
+          <div className='active-chips'>
+            {exercises.map((exercise) => (
+              <Chip
+                className={'chip'}
+                key={exercise}
+                disabled={false}
+                onClick={() => handleClickChip(exercise)}
+                size="lg"
+                variant="solid"
+                color="primary">
+                {exercise}
+              </Chip>
+            ))}
+          </div>
 
-        <div>
-          {doneExercises.map((exercise) => (
-            <Chip
-              className={'chip'}
-              key={exercise}
-              onClick={() => handleClickDisabledChip(exercise)}
-              size="lg"
-              variant="solid">
-              {exercise}
-            </Chip>
-          ))}
+          <div className='done-chips'>
+            {doneExercises.map((exercise) => (
+              <Chip
+                className={'chip'}
+                key={exercise}
+                onClick={() => handleClickDisabledChip(exercise)}
+                size="lg"
+                variant="solid">
+                {exercise}
+              </Chip>
+            ))}
+          </div>
         </div>
-        {/* <button onClick={handleReset}>Reset</button> removeEytan */}
         <button
-          className="edit-btn"
-          style={{
-            background: isEditing ? '#ffcaca' : undefined,
-          }}
+          className={`edit-btn${isEditing ? ' editing' : ''}`}
           onClick={handleIsEditing}>
           +
         </button>
-
-        <button onClick={openAuthModal}>Auth</button>
       </div>
+      <AuthModal
+        open={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onGoogleSignIn={handleGoogleSignIn}
+      />
     </>
   );
 }
