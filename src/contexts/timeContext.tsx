@@ -6,6 +6,8 @@ interface MyContextType {
   isPlaying: boolean;
   setInitialRemainingTime: React.Dispatch<React.SetStateAction<number>>;
   setisPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+  seconds: number;
+  setSeconds: React.Dispatch<React.SetStateAction<number>>;
 }
 
 // 2. Create the context
@@ -17,6 +19,7 @@ export const TimeContextProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [initialRemainingTime, setInitialRemainingTime] = useState(60);
   const [isPlaying, setisPlaying] = useState(false);
+  const [seconds, setSeconds] = useState(60);
 
   return (
     <MyContext.Provider
@@ -25,6 +28,8 @@ export const TimeContextProvider: React.FC<{ children: React.ReactNode }> = ({
         setInitialRemainingTime,
         isPlaying,
         setisPlaying,
+        seconds,
+        setSeconds,
       }}>
       {children}
     </MyContext.Provider>

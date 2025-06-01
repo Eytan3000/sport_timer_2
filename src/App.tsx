@@ -2,13 +2,14 @@ import { useState } from 'react';
 import './App.css';
 
 import { Chip } from '@mui/joy';
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import Timer from './components/Timer';
 import { useChipsContext } from './contexts/chipsContext';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from './firebase/firebase';
 import AuthModal from './components/AuthModal';
 import { useAuth } from './contexts/AuthContext';
+import { useTimeContext } from './contexts/timeContext';
 
 function App() {
   const navigate = useNavigate();
@@ -27,9 +28,11 @@ function App() {
 
   const { doneExercises, setDoneExercises } = useChipsContext();
   const [isEditing, setIsEditing] = useState(false);
-  const [secs, setSecs] = useState(60);
+  // const [secs, setSecs] = useState(60);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  console.log(uid);
+
+  const { setSeconds } = useTimeContext();
+
   function handleClickChip(clickedExercise: string) {
     if (isEditing) {
       if (!uid) {
@@ -70,22 +73,17 @@ function App() {
     }
   }
 
-  function openAuthModal() {
-    setAuthModalOpen(true);
-  }
-
   return (
     <>
       <div className="main-container">
-
         <div className="button-row">
-          <button onClick={() => setSecs(90)}>90</button>
-          <button onClick={() => setSecs(60)}>60</button>
+          <button onClick={() => setSeconds(90)}>90</button>
+          <button onClick={() => setSeconds(60)}>60</button>
         </div>
 
-        <Timer secs={secs} />
+        <Timer />
         <div className="exercise-container">
-          <div className='active-chips'>
+          <div className="active-chips">
             {exercises.map((exercise) => (
               <Chip
                 className={'chip'}
@@ -100,7 +98,7 @@ function App() {
             ))}
           </div>
 
-          <div className='done-chips'>
+          <div className="done-chips">
             {doneExercises.map((exercise) => (
               <Chip
                 className={'chip'}

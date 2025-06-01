@@ -9,13 +9,7 @@ function playSound() {
   audio.play();
 }
 
-export default function Timer({
-  secs = 60,
-  size = 300,
-}: {
-  secs?: number;
-  size?: number;
-}) {
+export default function Timer({ size = 300 }: { size?: number }) {
   const [restart, setrestart] = useState(0);
 
   const {
@@ -23,6 +17,7 @@ export default function Timer({
     setInitialRemainingTime,
     isPlaying,
     setisPlaying,
+    seconds,
   } = useTimeContext();
 
   let rt = 0;
@@ -49,7 +44,7 @@ export default function Timer({
         key={restart}
         size={size}
         isPlaying={isPlaying}
-        duration={secs}
+        duration={seconds}
         colors={
           isPlaying
             ? ['#004777', '#F7B801', '#A30000', '#A30000']
