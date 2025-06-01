@@ -1,0 +1,45 @@
+.edit-set-main-container {
+  display: flex;
+
+  flex-direction: column;
+  min-height: 100dvh;
+  justify-content: space-between;
+}
+
+.edit-set-secondary-container {
+}
+
+.edit-set-header {
+  display: flex;
+}
+
+.inputs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.edit-set-buttons-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 41px;
+}
+
+.arrow {
+  height: 30px;
+  padding-top: 25px;
+
+  position: absolute;
+  inset-inline-start: 40px;
+  inset-block-start: 10px;
+}
+
+
+
+.edit-set-next-prev-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 20px;
+}

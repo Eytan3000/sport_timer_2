@@ -1,7 +1,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
 }
 
@@ -43,4 +43,42 @@
 
 .chip {
   margin: 6px 4px;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  height: 100%;
+}
+
+.button-row {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  /* padding: 20px; */
+  /* margin-top: 20px; */
+}
+
+.edit-btn {
+  /* background will be set inline for isEditing, but default can be empty */
+  /* margin: 20px; */
+}
+
+.exercise-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.edit-btn.editing {
+  background: #ffcaca;
+}
+
+.done-chips {
+  height: 80px;
+}
+.active-chips {
+  height: 80px;
 }

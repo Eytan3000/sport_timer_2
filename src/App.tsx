@@ -1,17 +1,22 @@
 import { useState } from 'react';
-import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import './App.css';
-import sound_321go from './assets/321done.mp3';
+
 import { Chip } from '@mui/joy';
-function playSound() {
-  const audio = new Audio(sound_321go);
-  audio.play();
-}
+import { useNavigate } from '@tanstack/react-router';
+import Timer from './components/Timer';
+import { useChipsContext } from './contexts/chipsContext';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth } from './firebase/firebase';
+import AuthModal from './components/AuthModal';
+import { useAuth } from './contexts/AuthContext';
+import { useTimeContext } from './contexts/timeContext';
 
 function App() {
-  const [restart, setrestart] = useState(0);
-  const [isPlaying, setisPlaying] = useState(false);
-  const [secs, setSecs] = useState(60);
+  const navigate = useNavigate();
+
+  const { user } = useAuth();
+  const uid = user?.uid;
+
   const [exercises, setExercises] = useState([
     'Legs',
     'Abdominal',
@@ -20,23 +25,31 @@ function App() {
     'Pull ups',
     'Dips',
   ]);
-  const [doneExercises, setDoneExercises] = useState<string[]>([]);
 
-  function play() {
-    playSound();
-  }
+  const { doneExercises, setDoneExercises } = useChipsContext();
+  const [isEditing, setIsEditing] = useState(false);
+  // const [secs, setSecs] = useState(60);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
-  function handleOnUpdate(sec: number) {
-    sec === 4 && play();
-  }
+  const { setSeconds } = useTimeContext();
 
-  //setDoneExercises
-
-  function handleClickChip(exerciseToRemove: string) {
-    setExercises((prev) =>
-      prev.filter((exercise) => exercise !== exerciseToRemove)
-    );
-    setDoneExercises((prev) => [...prev, exerciseToRemove]);
+  function handleClickChip(clickedExercise: string) {
+    if (isEditing) {
+      if (!uid) {
+        setAuthModalOpen(true);
+        return;
+      } else {
+        navigate({
+          to: '/editSet/$exercise',
+          params: { exercise: clickedExercise },
+        });
+      }
+    } else {
+      setExercises((prev) =>
+        prev.filter((exercise) => exercise !== clickedExercise)
+      );
+      setDoneExercises((prev) => [...prev, clickedExercise]);
+    }
   }
 
   function handleClickDisabledChip(exerciseToAdd: string) {
@@ -46,94 +59,69 @@ function App() {
     setExercises((prev) => [...prev, exerciseToAdd]);
   }
 
-  function handleReset() {
-    setExercises((prev) => [...prev, ...doneExercises]);
-    setDoneExercises([]);
+  function handleIsEditing() {
+    setIsEditing((prev) => !prev);
   }
+
+  async function handleGoogleSignIn() {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      setAuthModalOpen(false);
+    } catch (error) {
+      alert('Google sign-in failed');
+    }
+  }
+
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          gap: '20px',
-        }}>
-          eytan
-        <div style={{ marginBottom: '20px' }}>
-          {exercises.map((exercise) => (
-            <Chip
-              className={'chip'}
-              key={exercise}
-              disabled={false}
-              onClick={() => handleClickChip(exercise)}
-              size="lg"
-              variant="solid"
-              color="primary">
-              {exercise}
-            </Chip>
-          ))}
+      <div className="main-container">
+        <div className="button-row">
+          <button onClick={() => setSeconds(90)}>90</button>
+          <button onClick={() => setSeconds(60)}>60</button>
         </div>
-        <div
-          style={{
-            // marginBottom: '20px',
-            display: 'flex',
-            gap: '20px',
-            justifyContent: 'center',
-          }}>
-          <button onClick={() => setSecs(90)}>90</button>
-          <button onClick={() => setSecs(60)}>60</button>
+
+        <Timer />
+        <div className="exercise-container">
+          <div className="active-chips">
+            {exercises.map((exercise) => (
+              <Chip
+                className={'chip'}
+                key={exercise}
+                disabled={false}
+                onClick={() => handleClickChip(exercise)}
+                size="lg"
+                variant="solid"
+                color="primary">
+                {exercise}
+              </Chip>
+            ))}
+          </div>
+
+          <div className="done-chips">
+            {doneExercises.map((exercise) => (
+              <Chip
+                className={'chip'}
+                key={exercise}
+                onClick={() => handleClickDisabledChip(exercise)}
+                size="lg"
+                variant="solid">
+                {exercise}
+              </Chip>
+            ))}
+          </div>
         </div>
-        <div
-          style={{ margin: '0 auto' }}
-          onClick={() => {
-            setisPlaying((prev) => !prev);
-            setrestart((prev) => prev + 1);
-          }}>
-          <CountdownCircleTimer
-            onComplete={() => {
-              // // do your stuff here
-              // return { shouldRepeat: true, delay: 1.5 }; // repeat animation in 1.5 seconds
-              setisPlaying((prev) => !prev);
-            }}
-            key={restart}
-            size={300}
-            isPlaying={isPlaying}
-            duration={secs}
-            colors={
-              isPlaying
-                ? ['#004777', '#F7B801', '#A30000', '#A30000']
-                : ['#acacac', '#acacac', '#acacac', '#acacac']
-            }
-            colorsTime={[7, 5, 2, 0]}
-            onUpdate={handleOnUpdate}>
-            {/* {({ remainingTime }) => remainingTime} */}
-            {({ remainingTime }) => (
-              <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
-                {remainingTime}
-              </div>
-            )}
-          </CountdownCircleTimer>
-        </div>
-        <div
-          style={
-            {
-              // marginBlock: '20px'
-            }
-          }>
-          {doneExercises.map((exercise) => (
-            <Chip
-              className={'chip'}
-              key={exercise}
-              onClick={() => handleClickDisabledChip(exercise)}
-              size="lg"
-              variant="solid">
-              {exercise}
-            </Chip>
-          ))}
-        </div>
-        <button onClick={handleReset}>Reset</button>
+        <button
+          className={`edit-btn${isEditing ? ' editing' : ''}`}
+          onClick={handleIsEditing}>
+          +
+        </button>
       </div>
+      <AuthModal
+        open={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onGoogleSignIn={handleGoogleSignIn}
+      />
     </>
   );
 }
