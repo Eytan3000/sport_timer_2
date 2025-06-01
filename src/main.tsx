@@ -19,7 +19,7 @@ declare module '@tanstack/react-router' {
   }
 }
 
-function AppProviders() {
+export default function AppProviders() {
   const { user } = useAuth();
   return (
     <ChipsContextProvider>
