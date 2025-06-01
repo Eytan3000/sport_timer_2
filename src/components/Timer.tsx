@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-import sound_321go from '../assets/321done.mp3';
+// import sound_321go from '../assets/321done.mp3';
 import './Timer.css';
 import { useTimeContext } from '../contexts/timeContext';
 
-function playSound() {
-  const audio = new Audio(sound_321go);
-  audio.play();
-}
+// function playSound() {
+//   const audio = new Audio(sound_321go);
+//   audio.play();
+// }
 
 export default function Timer({ size = 300 }: { size?: number }) {
   const [restart, setrestart] = useState(0);
@@ -21,11 +21,12 @@ export default function Timer({ size = 300 }: { size?: number }) {
   } = useTimeContext();
 
   let rt = 0;
-  function play() {
-    playSound();
-  }
+  // function play() {
+  //   playSound();
+  // }
 
-  function handleOnUpdate(sec: number) {
+  function handleOnUpdate() {
+  // sec: number
     // sec === 4 && play();
     setInitialRemainingTime(rt);
   }
