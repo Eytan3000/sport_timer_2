@@ -59,6 +59,7 @@ function App() {
           justifyContent: 'center',
           gap: '20px',
         }}>
+          eytan
         <div style={{ marginBottom: '20px' }}>
           {exercises.map((exercise) => (
             <Chip
