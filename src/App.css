@@ -51,6 +51,7 @@
   justify-content: space-between;
   gap: 20px;
   height: 100%;
+  position: relative;
 }
 
 .button-row {
@@ -87,3 +88,5 @@
 .firebase-emulator-warning {
   display: none !important;
 }
+
+

@@ -12,7 +12,8 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as EditSetExerciseImport } from './routes/editSet/$exercise'
+import { Route as WorkoutsHistoryWorkoutsHistoryImport } from './routes/workoutsHistory/workoutsHistory'
+import { Route as EditSetExerciseImport } from './routes/editSet/$./routes/workoutsHistory/workoutsHistory'
 
 // Create/Update Routes
 
@@ -21,6 +22,13 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const WorkoutsHistoryWorkoutsHistoryRoute =
+  WorkoutsHistoryWorkoutsHistoryImport.update({
+    id: '/workoutsHistory/workoutsHistory',
+    path: '/workoutsHistory/workoutsHistory',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 const EditSetExerciseRoute = EditSetExerciseImport.update({
   id: '/editSet/$exercise',
@@ -46,6 +54,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditSetExerciseImport
       parentRoute: typeof rootRoute
     }
+    '/workoutsHistory/workoutsHistory': {
+      id: '/workoutsHistory/workoutsHistory'
+      path: '/workoutsHistory/workoutsHistory'
+      fullPath: '/workoutsHistory/workoutsHistory'
+      preLoaderRoute: typeof WorkoutsHistoryWorkoutsHistoryImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +69,45 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/editSet/$exercise': typeof EditSetExerciseRoute
+  '/workoutsHistory/workoutsHistory': typeof WorkoutsHistoryWorkoutsHistoryRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/editSet/$exercise': typeof EditSetExerciseRoute
+  '/workoutsHistory/workoutsHistory': typeof WorkoutsHistoryWorkoutsHistoryRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/editSet/$exercise': typeof EditSetExerciseRoute
+  '/workoutsHistory/workoutsHistory': typeof WorkoutsHistoryWorkoutsHistoryRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/editSet/$exercise'
+  fullPaths: '/' | '/editSet/$exercise' | '/workoutsHistory/workoutsHistory'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/editSet/$exercise'
-  id: '__root__' | '/' | '/editSet/$exercise'
+  to: '/' | '/editSet/$exercise' | '/workoutsHistory/workoutsHistory'
+  id:
+    | '__root__'
+    | '/'
+    | '/editSet/$exercise'
+    | '/workoutsHistory/workoutsHistory'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EditSetExerciseRoute: typeof EditSetExerciseRoute
+  WorkoutsHistoryWorkoutsHistoryRoute: typeof WorkoutsHistoryWorkoutsHistoryRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EditSetExerciseRoute: EditSetExerciseRoute,
+  WorkoutsHistoryWorkoutsHistoryRoute: WorkoutsHistoryWorkoutsHistoryRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +121,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/editSet/$exercise"
+        "/editSet/$exercise",
+        "/workoutsHistory/workoutsHistory"
       ]
     },
     "/": {
@@ -105,6 +130,9 @@ export const routeTree = rootRoute
     },
     "/editSet/$exercise": {
       "filePath": "editSet/$exercise.tsx"
+    },
+    "/workoutsHistory/workoutsHistory": {
+      "filePath": "workoutsHistory/workoutsHistory.tsx"
     }
   }
 }

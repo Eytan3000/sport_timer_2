@@ -10,6 +10,7 @@ import { auth } from './firebase/firebase';
 import { useAuth } from './contexts/AuthContext';
 import { useTimeContext } from './contexts/timeContext';
 import EmailAuthModal from './components/EmailAuthModal';
+import HamburgerIcon from './components/hamburger/HamburgerIcon';
 
 function App() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function App() {
   const { user } = useAuth();
   const uid = user?.uid;
 
-  console.log('uid: ',uid) //removeEytan
+  console.log('uid: ', uid); //removeEytan
 
   const [exercises, setExercises] = useState([
     'Legs',
@@ -75,9 +76,15 @@ function App() {
     }
   }
 
+  function onMenuClick() {
+    navigate({ to: '/workoutsHistory/workoutsHistory' });
+  }
+
   return (
     <>
       <div className="main-container">
+        <HamburgerIcon onClick={onMenuClick} />
+
         <div className="button-row">
           <button onClick={() => setSeconds(90)}>90</button>
           <button onClick={() => setSeconds(60)}>60</button>
