@@ -26,7 +26,7 @@ export default function Timer({ size = 300 }: { size?: number }) {
   // }
 
   function handleOnUpdate() {
-  // sec: number
+    // sec: number
     // sec === 4 && play();
     setInitialRemainingTime(rt);
   }
@@ -41,6 +41,7 @@ export default function Timer({ size = 300 }: { size?: number }) {
       <CountdownCircleTimer
         onComplete={() => {
           setisPlaying((prev) => !prev);
+          setInitialRemainingTime(seconds);
         }}
         key={restart}
         size={size}
