@@ -5,7 +5,7 @@ import { Chip } from '@mui/joy';
 import { useNavigate } from '@tanstack/react-router';
 import Timer from './components/Timer';
 import { useChipsContext } from './contexts/chipsContext';
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 import { auth } from './firebase/firebase';
 import AuthModal from './components/AuthModal';
 import { useAuth } from './contexts/AuthContext';
@@ -66,7 +66,8 @@ function App() {
   async function handleGoogleSignIn() {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      // await signInWithPopup(auth, provider);
+      await signInWithRedirect(auth, provider);
       setAuthModalOpen(false);
     } catch (error) {
       alert('Google sign-in failed');
