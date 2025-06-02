@@ -3,13 +3,13 @@ import './App.css';
 
 import { Chip } from '@mui/joy';
 import { useNavigate } from '@tanstack/react-router';
-import Timer from './components/Timer';
+import Timer from './components/Timer/Timer';
 import { useChipsContext } from './contexts/chipsContext';
 import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 import { auth } from './firebase/firebase';
 import { useAuth } from './contexts/AuthContext';
 import { useTimeContext } from './contexts/timeContext';
-import EmailAuthModal from './components/EmailAuthModal';
+import EmailAuthModal from './components/EmailAuthModal/EmailAuthModal';
 import HamburgerIcon from './components/hamburger/HamburgerIcon';
 
 function App() {
@@ -17,8 +17,6 @@ function App() {
 
   const { user } = useAuth();
   const uid = user?.uid;
-
-  console.log('uid: ', uid); //removeEytan
 
   const [exercises, setExercises] = useState([
     'Legs',
@@ -68,7 +66,6 @@ function App() {
   async function handleGoogleSignIn() {
     const provider = new GoogleAuthProvider();
     try {
-      // await signInWithPopup(auth, provider);
       await signInWithRedirect(auth, provider);
       setAuthModalOpen(false);
     } catch (error) {
@@ -77,7 +74,7 @@ function App() {
   }
 
   function onMenuClick() {
-    navigate({ to: '/workoutsHistory/workoutsHistory' });
+    navigate({ to: '/workoutsHistory' });
   }
 
   return (
@@ -126,14 +123,8 @@ function App() {
           +
         </button>
       </div>
-      {/* <AuthModal
-        open={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-        onGoogleSignIn={handleGoogleSignIn}
-      /> */}
       <EmailAuthModal
         open={authModalOpen}
-        // open={true}
         onClose={() => setAuthModalOpen(false)}
         onGoogleSignIn={handleGoogleSignIn}
       />

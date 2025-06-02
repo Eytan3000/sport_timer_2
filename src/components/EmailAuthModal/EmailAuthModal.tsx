@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import Modal from './Modal/Modal';
+import Modal from '../Modal/Modal';
 import styles from './EmailAuthModal.module.css';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { auth } from '../firebase/firebase';
+import { auth } from '../../firebase/firebase';
 
 interface AuthModalProps {
   open: boolean;

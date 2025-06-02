@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from '@tanstack/react-router';
 import './EditSet.css';
-import Timer from '../../components/Timer';
+import Timer from '../../components/Timer/Timer';
 import backArrow from '../../assets/back_arrow.svg';
 import { useState, useRef, useEffect } from 'react';
 import { Exercise, ExerciseSet } from '../../types';

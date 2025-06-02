@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 // import sound_321go from '../assets/321done.mp3';
 import './Timer.css';
-import { useTimeContext } from '../contexts/timeContext';
+import { useTimeContext } from '../../contexts/timeContext';
 
 // function playSound() {
 //   const audio = new Audio(sound_321go);

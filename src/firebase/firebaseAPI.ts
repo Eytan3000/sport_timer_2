@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import { Exercise } from "../types";
 
@@ -49,3 +49,33 @@ export async function getExerciseByName(
     const exercises: Exercise[] = data.exercises || [];
     return exercises.find((e) => e.name === exerciseName) || null;
 }
+
+export async function getAllExercisesByUserId(uid: string) {
+    // Fetch all workouts for the user
+    const workoutsRef = collection(db, "users", uid, "workouts");
+    const snapshot = await getDocs(workoutsRef);
+    let allExercises: Exercise[] = [];
+    snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.exercises && Array.isArray(data.exercises)) {
+            allExercises = allExercises.concat(data.exercises);
+        }
+    });
+    return allExercises;
+}
+
+export async function getAllWorkoutsByUserId(uid: string) {
+    const workoutsRef = collection(db, "users", uid, "workouts");
+    const snapshot = await getDocs(workoutsRef);
+    const workouts: { date: string, exercises: Exercise[] }[] = [];
+    snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.exercises && Array.isArray(data.exercises)) {
+            workouts.push({ date: data.date, exercises: data.exercises });
+        }
+    });
+    // Sort by date descending
+    workouts.sort((a, b) => b.date.localeCompare(a.date));
+    return workouts;
+}
+
