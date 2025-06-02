@@ -17,6 +17,8 @@ function App() {
   const { user } = useAuth();
   const uid = user?.uid;
 
+  console.log('uid: ',uid) //removeEytan
+
   const [exercises, setExercises] = useState([
     'Legs',
     'Abdominal',
@@ -28,7 +30,6 @@ function App() {
 
   const { doneExercises, setDoneExercises } = useChipsContext();
   const [isEditing, setIsEditing] = useState(false);
-  // const [secs, setSecs] = useState(60);
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
   const { setSeconds } = useTimeContext();
@@ -125,6 +126,7 @@ function App() {
       /> */}
       <EmailAuthModal
         open={authModalOpen}
+        // open={true}
         onClose={() => setAuthModalOpen(false)}
         onGoogleSignIn={handleGoogleSignIn}
       />

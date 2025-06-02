@@ -1,6 +1,6 @@
 // AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
+import { User, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 
 type AuthContextType = {
@@ -25,11 +25,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (firebaseUser) {
         setUser(firebaseUser);
       } 
-      else {
-          const { user: anonUser } = await signInAnonymously(auth);
-          setUser(anonUser);
-          setLoading(false);
-        }
+      // else {
+      //     const { user: anonUser } = await signInAnonymously(auth);
+      //     setUser(anonUser);
+      //     setLoading(false);
+      //   }
       });
       
       setLoading(false);

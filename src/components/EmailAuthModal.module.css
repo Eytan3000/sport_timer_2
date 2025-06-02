@@ -1,0 +1,75 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  min-width: 300px;
+}
+
+.tabRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tabButton {
+  padding: 8px 16px;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  cursor: pointer;
+}
+
+.tabButtonActive {
+  border-bottom: 2px solid #1976d2;
+  font-weight: 700;
+}
+
+.tabButtonInactive {
+  border-bottom: 2px solid transparent;
+  font-weight: 400;
+}
+
+.heading {
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.submitButton {
+  padding: 8px;
+  border-radius: 4px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+}
+
+.googleButton {
+  background: #fff;
+  color: #444;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.googleIcon {
+  width: 24px;
+  height: 24px;
+} 
