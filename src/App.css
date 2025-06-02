@@ -82,3 +82,8 @@
 .active-chips {
   height: 80px;
 }
+
+/* remove warning */
+.firebase-emulator-warning {
+  display: none !important;
+}

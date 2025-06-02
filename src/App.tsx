@@ -7,9 +7,9 @@ import Timer from './components/Timer';
 import { useChipsContext } from './contexts/chipsContext';
 import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 import { auth } from './firebase/firebase';
-import AuthModal from './components/AuthModal';
 import { useAuth } from './contexts/AuthContext';
 import { useTimeContext } from './contexts/timeContext';
+import EmailAuthModal from './components/EmailAuthModal';
 
 function App() {
   const navigate = useNavigate();
@@ -118,7 +118,12 @@ function App() {
           +
         </button>
       </div>
-      <AuthModal
+      {/* <AuthModal
+        open={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onGoogleSignIn={handleGoogleSignIn}
+      /> */}
+      <EmailAuthModal
         open={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
         onGoogleSignIn={handleGoogleSignIn}
