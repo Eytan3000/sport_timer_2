@@ -18,16 +18,11 @@ function App() {
   const { user } = useAuth();
   const uid = user?.uid;
 
-  const [exercises, setExercises] = useState([
-    'Legs',
-    'Abdominal',
-    'Biceps',
-    'Chest',
-    'Pull ups',
-    'Dips',
-  ]);
 
-  const { doneExercises, setDoneExercises } = useChipsContext();
+
+  const { doneExercises, setDoneExercises, exercises, setExercises } =
+    useChipsContext();
+
   const [isEditing, setIsEditing] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
 

@@ -4,6 +4,8 @@ import React, { createContext, useContext, useState } from 'react';
 interface MyContextType {
   doneExercises: string[];
   setDoneExercises: React.Dispatch<React.SetStateAction<string[]>>;
+  exercises: string[];
+  setExercises: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 // 2. Create the context
@@ -14,9 +16,18 @@ export const ChipsContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [doneExercises, setDoneExercises] = useState<string[]>([]);
-
+  const [exercises, setExercises] = useState([
+    'Legs',
+    'Abdominal',
+    'Biceps',
+    'Chest',
+    'Pull ups',
+    'Dips',
+  ]);
+  
   return (
-    <MyContext.Provider value={{ doneExercises, setDoneExercises }}>
+    <MyContext.Provider
+      value={{ doneExercises, setDoneExercises, exercises, setExercises }}>
       {children}
     </MyContext.Provider>
   );
